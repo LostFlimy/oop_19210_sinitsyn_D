@@ -1,5 +1,4 @@
-#ifndef LAB1_TRITS_CLASS_TRIT_SET_H
-#define LAB1_TRITS_CLASS_TRIT_SET_H
+#pragma once
 #include "class_Trit.h"
 #include <cstdint>
 #include <vector>
@@ -73,4 +72,3 @@ public:
 
 
 
-#endif //LAB1_TRITS_CLASS_TRIT_SET_H

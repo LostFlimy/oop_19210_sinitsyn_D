@@ -1,5 +1,4 @@
-#ifndef LAB1_TRITS_CLASS_TRIT_H
-#define LAB1_TRITS_CLASS_TRIT_H
+#pragma once
 #include<iostream>
 
 enum trit{
@@ -42,5 +41,3 @@ public:
 
 
 
-
-#endif //LAB1_TRITS_CLASS_TRIT_H
