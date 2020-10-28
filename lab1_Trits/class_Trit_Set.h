@@ -14,7 +14,9 @@ class TritSet{
 private:
     vector<uint32_t> set;
     size_t size;
-    int32_t last;
+    size_t last;
+    bool last_is_Unknown;
+    size_t lastNotUnknownIndex() const;
 public:
     class TritProxy{
     private:
@@ -62,11 +64,7 @@ public:
 
     Trit operator [](size_t index) const;
 
-    void push(Trit new_value);
-
-    Trit lastTrit();
-
-    int32_t lastpos();
+    void shrink();
 };
 
 

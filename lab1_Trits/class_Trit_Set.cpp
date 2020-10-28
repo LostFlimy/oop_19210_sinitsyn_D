@@ -15,12 +15,14 @@ TritSet::TritSet(size_t count_of_trits) {
     set.resize(count_of_trits * 2 / (8 * sizeof(uint32_t)) + 1);
     size = count_of_trits;
     last = -1;
+    last_is_Unknown = True;
 }
 
 TritSet::TritSet() {
     set.clear();
     size = 0;
     last = -1;
+    last_is_Unknown = True;
 }
 
 Trit TritSet::getAt(size_t index) const {
@@ -30,6 +32,16 @@ Trit TritSet::getAt(size_t index) const {
 }
 
 void TritSet::setAt(size_t index, Trit value) {
+    if(index > capacity() - 1){
+        size = index;
+    }
+    if(index >= last){
+        last = index;
+        if(value == Unknown)
+            last_is_Unknown = True;
+        else
+            last_is_Unknown = False;
+    }
     uint32_t val = 0b00;
     if(value == Trit(False))
         val = 0b10;
@@ -44,6 +56,9 @@ void TritSet::setAt(size_t index, Trit value) {
 }
 
 void TritSet::setAt(size_t index, trit value) {
+    if(index > capacity() - 1){
+        size = index;
+    }
     uint32_t val = 0b00;
     if(value == False)
         val = 0b10;
@@ -96,24 +111,11 @@ TritSet::TritProxy TritSet::operator[](const size_t index) {
     return TritProxy(*this, index);
 }
 
-Trit TritSet::operator[](size_t index) const {
+Trit TritSet::operator[](const size_t index) const {
     if(index > size - 1) {
         return (Trit)Unknown;
     }
     return (*this).getAt(index);
-}
-
-void TritSet::push(Trit new_value) {
-    last += 1;
-    setAt(last, new_value);
-}
-
-Trit TritSet::lastTrit() {
-    return getAt(last);
-}
-
-int32_t TritSet::lastpos() {
-    return last;
 }
 
 TritSet::TritProxy::TritProxy(TritSet &tritSet, size_t index) : set(tritSet), where(index) {}
@@ -123,11 +125,21 @@ TritSet::TritProxy::operator Trit() const {
 }
 
 TritSet::TritProxy &TritSet::TritProxy::operator=(trit hsr) {
+    if(where > set.capacity()){
+        if(hsr == Unknown){
+            return *this;
+        }
+    }
     set.setAt(where, Trit(hsr));
     return *this;
 }
 
 TritSet::TritProxy &TritSet::TritProxy::operator=(Trit hsr) {
+    if(where > set.capacity()){
+        if(hsr == Unknown){
+            return *this;
+        }
+    }
     set.setAt(where, hsr);
     return *this;
 }
@@ -151,5 +163,45 @@ Trit TritSet::TritProxy::operator~() {
 ostream &operator<<(ostream &stream, TritSet::TritProxy proxy) {
     stream << (Trit)proxy;
     return stream;
+}
+
+void TritSet::shrink() {
+    if(!last_is_Unknown){
+        set.resize(last/16 + ((last % 16 == 0)?0:1));
+        size = last;
+        last_is_Unknown = False;
+        return;
+    }
+    size_t last = lastNotUnknownIndex();
+    if(last != -1){
+        set.resize(last/16 + ((last % 16 == 0)?0:1));
+        size = last;
+        last_is_Unknown = False;
+        return;
+    }
+    set.resize(0);
+}
+
+size_t TritSet::lastNotUnknownIndex() const{
+    int cell = set.size() - 1;
+    bool cellIsChanged = false;
+    for(int i = set.size() - 1; i >= 0; --i){
+        uint32_t mask = ~0;
+        if(set[i] & mask != 0){
+            cell = i;
+            cellIsChanged = true;
+            break;
+        }
+    }
+    if(!cellIsChanged)
+        return -1;
+    size_t index = 16 * (cell + 1) - 1;
+    for(size_t i = index; i > index - 16; --i){
+        if(getAt(i) != Unknown) {
+            index = i;
+            break;
+        }
+    }
+    return index;
 }
 
