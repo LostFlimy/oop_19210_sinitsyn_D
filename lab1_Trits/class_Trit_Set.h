@@ -33,8 +33,10 @@ public:
         bool operator ==(const Trit& hsr);
 
         Trit operator &(const Trit& hsr);
+        friend Trit operator &(const Trit& lsr, const TritProxy& hsr);
 
         Trit operator |(const Trit& hsr);
+        friend Trit operator |(const Trit& lsr, const TritProxy& hsr);
 
         Trit operator ~();
 
@@ -65,6 +67,12 @@ public:
     Trit operator [](size_t index) const;
 
     void shrink();
+
+    size_t length() const;
+
+    void trim(size_t lastIndex);
+
+    size_t cardinality(Trit value);
 };
 
 

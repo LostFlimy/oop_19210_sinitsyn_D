@@ -172,6 +172,15 @@ ostream &operator<<(ostream &stream, TritSet::TritProxy proxy) {
     return stream;
 }
 
+Trit operator&(const Trit &lsr, const TritSet::TritProxy &hsr) {
+    return (lsr & (Trit)(hsr));
+}
+
+Trit operator|(const Trit &lsr, const TritSet::TritProxy &hsr) {
+    return (lsr | (Trit)(hsr));
+}
+
+
 void TritSet::shrink() {
     if(!last_is_Unknown){
         set.resize(last/16 + ((last % 16 == 0)?0:1));
@@ -211,4 +220,41 @@ size_t TritSet::lastNotUnknownIndex() const{
     }
     return index;
 }
+
+size_t TritSet::length() const {
+    return lastNotUnknownIndex() + 1;
+}
+
+void TritSet::trim(size_t lastIndex) {
+    size_t cell = lastIndex / 16 + (lastIndex % 16 == 0?0:1);
+    for(size_t i = cell; i < set.size() ; ++i) {
+        set[i] = 0;
+    }
+    last = lastIndex;
+    for(size_t i = lastIndex; i < cell * 16; ++i) {
+        setAt(i, Unknown);
+    }
+    if(getAt(lastIndex) == Unknown) {
+        last_is_Unknown = true;
+    } else {
+        last_is_Unknown = false;
+    }
+}
+
+size_t TritSet::cardinality(Trit value) {
+    size_t sum = 0;
+    if(value == Unknown) {
+        for(int i = last; i > -1; --i){
+            if(getAt(i) == Unknown)
+                sum++;
+        }
+    } else {
+        for(int i = lastNotUnknownIndex(); i > -1; --i){
+            if(getAt(i) == value)
+                sum++;
+        }
+    }
+    return sum;
+}
+
 
