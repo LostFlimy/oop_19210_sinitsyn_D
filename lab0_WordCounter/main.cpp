@@ -26,15 +26,15 @@ TEST(WordCounterTests, WordStateService){
     {
         WordStateService service1;
         string curstring = "You just want attention, you don't want my heart\n"
-                           "Maybe you just hate the thought of me with someone new\n"
+                           "Maybe you you hate the thought of me with someone new\n"
                            "Yeah, you just want attention, I knew from the start\n"
                            "You're just making sure I'm never gettin' over you, oh";
         TokenService tokens;
         tokens.fillLine(curstring);
         service1.createState(tokens.getParts());
         vector<pair<pair<int, double>, string>> result = service1.getState();
-        ASSERT_TRUE(result[0].second == "you" || result[0].second == "just");
-        ASSERT_TRUE(result[0].first.second == 0.1);
+        ASSERT_TRUE(result[0].second == "you");
+        ASSERT_TRUE(result[0].first.second == 0.125);
     }
 }
 
