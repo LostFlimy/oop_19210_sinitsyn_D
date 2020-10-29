@@ -33,7 +33,7 @@ Trit TritSet::getAt(size_t index) const {
 
 void TritSet::setAt(size_t index, Trit value) {
     if(index > capacity() - 1){
-        size = index;
+        size = index + 1;
     }
     if(index >= last){
         last = index;
@@ -57,7 +57,14 @@ void TritSet::setAt(size_t index, Trit value) {
 
 void TritSet::setAt(size_t index, trit value) {
     if(index > capacity() - 1){
-        size = index;
+        size = index + 1;
+    }
+    if(index >= last){
+        last = index;
+        if(value == Unknown)
+            last_is_Unknown = True;
+        else
+            last_is_Unknown = False;
     }
     uint32_t val = 0b00;
     if(value == False)
