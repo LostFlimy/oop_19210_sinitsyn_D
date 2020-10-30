@@ -1,7 +1,5 @@
-#include <iostream>
-#include "class_Trit_Set.h"
-
-using namespace std;
+#include <iostream>=
+#include "tests.cpp"
 
 int main() {
     return 0;
