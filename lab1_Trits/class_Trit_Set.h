@@ -5,11 +5,6 @@
 
 using namespace std;
 
-/*00 = unknown
- * 10 = False
- * 01 = True
- */
-
 class TritSet{
 private:
     vector<uint32_t> set;

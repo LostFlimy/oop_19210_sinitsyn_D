@@ -2,7 +2,7 @@
 
 
 size_t TritSet::capacity() const {
-    return set.size();
+    return size;
 }
 
 TritSet& TritSet::operator=(TritSet hsr) {
@@ -12,7 +12,8 @@ TritSet& TritSet::operator=(TritSet hsr) {
 }
 
 TritSet::TritSet(size_t count_of_trits) {
-    set.resize(count_of_trits * 2 / (8 * sizeof(uint32_t)) + 1);
+    set.resize(count_of_trits * 2 / (8 * sizeof(uint32_t))
+                + ( (count_of_trits * 2 % (8 * sizeof(uint32_t))) == 0?0:1));
     size = count_of_trits;
     last = -1;
     last_is_Unknown = True;

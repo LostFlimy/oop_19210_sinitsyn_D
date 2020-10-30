@@ -4,47 +4,39 @@ Trit::Trit(trit curValue) {
     value = curValue;
 }
 
-Trit Trit::operator&(const Trit &hsr) {
-    if(hsr.value == False || value == False)
+Trit Trit::operator&(const Trit &hsr) const {
+    if((hsr.value == False) || (value == False))
         return False;
-    if(hsr.value == Unknown || value == Unknown)
+    if((hsr.value == Unknown) || (value == Unknown))
         return Unknown;
     return True;
 }
 
-Trit Trit::operator&(const trit &hsr) {
-    if(hsr == False || value == False)
+Trit Trit::operator&(const trit &hsr) const {
+    if(hsr == False || this->value == False)
         return False;
-    if(hsr == Unknown || value == Unknown)
+    if(hsr == Unknown || this->value == Unknown)
         return Unknown;
     return True;
 }
 
 Trit operator&(const trit &lsr, const Trit &hsr) {
     if(lsr == False || hsr.value == False)
-        return False;
+        return Trit(False);
     if(lsr == Unknown || hsr.value == Unknown)
-        return Unknown;
-    return True;
+        return Trit(Unknown);
+    return Trit(True);
 }
 
-Trit Trit::operator~() {
+Trit Trit::operator~() const {
     if(value == Unknown)
-        return Unknown;
+        return Trit(Unknown);
     if(value == True)
-        return False;
-    return True;
+        return Trit(False);
+    return Trit(True);
 }
 
-Trit operator~(const trit &x) {
-    if(x == Unknown)
-        return Unknown;
-    if(x == False)
-        return True;
-    return False;
-}
-
-Trit Trit::operator|(const Trit &hsr) {
+Trit Trit::operator|(const Trit &hsr) const {
     if(hsr.value == False && value == False)
         return False;
     if(hsr.value == True || value == True)
@@ -52,7 +44,7 @@ Trit Trit::operator|(const Trit &hsr) {
     return Unknown;
 }
 
-Trit Trit::operator|(const trit &hsr) {
+Trit Trit::operator|(const trit &hsr) const {
     if(hsr == False && value == False)
         return False;
     if(hsr == True || value == True)
@@ -76,7 +68,7 @@ Trit::operator trit() const {
     return value;
 }
 
-bool Trit::operator==(const Trit &hsr) {
+bool Trit::operator==(const Trit &hsr) const {
     if( (value == True && hsr.value == True) ||
         (value == False && hsr.value == False) ||
         (value == Unknown && hsr.value == Unknown)) {
@@ -85,7 +77,7 @@ bool Trit::operator==(const Trit &hsr) {
     return false;
 }
 
-bool Trit::operator==(const trit &hsr) {
+bool Trit::operator==(const trit &hsr) const {
     if( (value == True && hsr == True) ||
         (value == False && hsr == False) ||
         (value == Unknown && hsr == Unknown)) {
