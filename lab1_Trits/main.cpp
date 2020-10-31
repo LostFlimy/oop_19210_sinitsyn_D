@@ -119,6 +119,7 @@ TEST(class_trit_set, constructor){
     TritSet set2(10);
     ASSERT_TRUE(set1.capacity() == 0);
     ASSERT_TRUE(set2.capacity() == 10);
+    ASSERT_TRUE(set2.getAt(5) == Unknown);
 }
 
 TEST(class_trit_set, setAt_and_getAt){
@@ -131,7 +132,55 @@ TEST(class_trit_set, setAt_and_getAt){
     ASSERT_TRUE(set.getAt(5) == True);
 }
 
+TEST(class_trit_set, assigment_operator){
+    TritSet set1(30);
+    TritSet set2(20);
+    set1.setAt(1, True);
+    set1.setAt(2, False);
+    set1.setAt(6, True);
+    set1.setAt(15, False);
+    set1.setAt(17, True);
+    set2.setAt(1, True);
+    set2.setAt(2, True);
+    set2.setAt(6, False);
+    set2.setAt(15, Unknown);
+    set2.setAt(13, Unknown);
+    set1 = set2;
+    ASSERT_TRUE(set1.capacity() == 20);
+    ASSERT_TRUE(set1.getAt(1) == True);
+    ASSERT_TRUE(set1.getAt(2) == True);
+    ASSERT_TRUE(set1.getAt(6) == False);
+    ASSERT_TRUE(set1.getAt(13) == Unknown);
+    ASSERT_TRUE(set1.getAt(15) == Unknown);
+    ASSERT_TRUE(set1.getAt(17) == Unknown);
+}
 
+TEST(class_trit_set, index_operator){
+    TritSet set1(30);
+    set1.setAt(1, True);
+    set1.setAt(2, False);
+    set1.setAt(6, True);
+    set1.setAt(15, False);
+    set1.setAt(17, True);
+    ASSERT_TRUE(set1[1] == True);
+    ASSERT_TRUE(set1[2] == False);
+    ASSERT_TRUE(set1[3] == Unknown);
+    ASSERT_TRUE(set1[6] == True);
+    ASSERT_TRUE(set1[17] == True);
+    ASSERT_TRUE(set1[0] == Unknown);
+    set1[2] = True;
+    set1[3] = False;
+    set1[17] = Unknown;
+    ASSERT_TRUE(set1[2] == True);
+    ASSERT_TRUE(set1[3] == False);
+    ASSERT_TRUE(set1[17] == Unknown);
+    set1[2] = set1[2] & False;
+    ASSERT_TRUE(set1[2] == False);
+    set1[2] = True | set1[2];
+    ASSERT_TRUE(set1[2] == True);
+    ASSERT_TRUE(set1[1000] == Unknown);
+    ASSERT_TRUE(set1.capacity() == 30);
+}
 
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);

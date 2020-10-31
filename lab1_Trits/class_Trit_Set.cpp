@@ -8,6 +8,8 @@ size_t TritSet::capacity() const {
 TritSet& TritSet::operator=(TritSet hsr) {
     set = hsr.set;
     size = hsr.size;
+    last = hsr.last;
+    last_is_Unknown = hsr.last_is_Unknown;
     return *this;
 }
 
@@ -27,7 +29,7 @@ TritSet::TritSet() {
 }
 
 Trit TritSet::getAt(size_t index) const {
-    uint32_t cell = set[index * 2 / (32 * 8)];
+    uint32_t cell = set[index * 2 / (8 * sizeof(uint32_t))];
     size_t shift = (index % (sizeof(uint32_t) * 8 / 2));
     return static_cast<Trit>(trit( (uint32_t)0b11 & (cell >> shift * 2) ));
 }
@@ -48,7 +50,7 @@ void TritSet::setAt(size_t index, Trit value) {
         val = 0b10;
     if(value == Trit(True))
         val = 0b01;
-    uint32_t set_cell = index / (16 * 8);
+    uint32_t set_cell = index / (16);
     uint32_t shift = index % (sizeof(uint32_t) * 8 / 2);
     uint32_t mask = 0b11 << (shift * 2);
     mask = ~mask;
@@ -72,7 +74,7 @@ void TritSet::setAt(size_t index, trit value) {
         val = 0b10;
     if(value == True)
         val = 0b01;
-    uint32_t set_cell = index / (16 * 8);
+    uint32_t set_cell = index / (16);
     uint32_t shift = index % (sizeof(uint32_t) * 8 / 2);
     uint32_t mask = 0b11 << (shift * 2);
     mask = ~mask;
@@ -123,7 +125,7 @@ Trit TritSet::operator[](const size_t index) const {
     if(index > size - 1) {
         return (Trit)Unknown;
     }
-    return (*this).getAt(index);
+    return getAt(index);
 }
 
 TritSet::TritProxy::TritProxy(TritSet &tritSet, size_t index) : set(tritSet), where(index) {}
