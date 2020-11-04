@@ -229,8 +229,9 @@ size_t TritSet::lastNotUnknownIndex() const{
             break;
         }
     }
-    if(!cellIsChanged)
+    if(!cellIsChanged) {
         return first_size;
+    }
     size_t index = 16 * (cell + 1) - 1;
     for(size_t i = index; i >= index - 15; --i){
         if(getAt(i) != Unknown) {
@@ -262,6 +263,9 @@ void TritSet::trim(size_t lastIndex) {
         last_is_Unknown = true;
     } else {
         last_is_Unknown = false;
+    }
+    if(lastNotUnknownIndex() == first_size && getAt(lastNotUnknownIndex()) == Unknown){
+        HaveNotUnknown = false;
     }
 }
 

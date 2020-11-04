@@ -291,6 +291,26 @@ TEST(class_trit_set, trim){
     ASSERT_TRUE(set[15] == Unknown);
     ASSERT_TRUE(set.capacity() == 20);
     ASSERT_TRUE(set.length() == 11);
+    set[18] = True;
+    set[11] = False;
+    set.trim(10);
+    ASSERT_TRUE(set[18] == Unknown);
+    ASSERT_TRUE(set[11] == Unknown);
+    ASSERT_TRUE(set.length() == -1);
+    ASSERT_TRUE(set.capacity() == 20);
+}
+
+TEST(class_trit_set, cardinality){
+    TritSet set(20);
+    set[0] = True;
+    set[1] = True;
+    set[16] = True;
+    set[3] = False;
+    set[17] = Unknown;
+    set[14] = False;
+    ASSERT_TRUE(set.cardinality(True) == 3);
+    ASSERT_TRUE(set.cardinality(False) == 2);
+    ASSERT_TRUE(set.cardinality(Unknown) == 13);
 }
 
 int main(int argc, char* argv[]) {
