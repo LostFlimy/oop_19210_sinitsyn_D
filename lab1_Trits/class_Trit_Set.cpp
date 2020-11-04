@@ -47,6 +47,7 @@ void TritSet::setAt(size_t index, Trit value) {
         set.resize(set_cell + 1, 0);
     }
     if(index >= last || !last_is_changed) {
+        last_is_changed = true;
         last = index;
         if (value == Unknown)
             last_is_Unknown = true;
@@ -75,6 +76,7 @@ void TritSet::setAt(size_t index, trit value) {
         set.resize(set_cell + 1, 0);
     }
     if(index >= last || !last_is_changed) {
+        last_is_changed = true;
         last = index;
         if (value == Unknown)
             last_is_Unknown = true;
@@ -206,7 +208,7 @@ void TritSet::shrink() {
         return;
     }
     size_t curlast = lastNotUnknownIndex();
-    if(!last_is_changed && curlast != first_size){
+    if(last_is_changed && curlast != first_size){
         set.resize(curlast/16 + (curlast%16 == 0?0:1));
         size = curlast + 1;
         last_is_Unknown = False;
@@ -230,7 +232,7 @@ size_t TritSet::lastNotUnknownIndex() const{
     if(!cellIsChanged)
         return first_size;
     size_t index = 16 * (cell + 1) - 1;
-    for(size_t i = index; i > index - 16; --i){
+    for(size_t i = index; i >= index - 15; --i){
         if(getAt(i) != Unknown) {
             index = i;
             break;
@@ -252,10 +254,10 @@ void TritSet::trim(size_t lastIndex) {
     for(size_t i = cell; i < set.size() ; ++i) {
         set[i] = 0;
     }
-    last = lastIndex;
     for(size_t i = lastIndex; i < cell * 16; ++i) {
         setAt(i, Unknown);
     }
+    last = (lastIndex <= last? lastIndex: last);
     if(getAt(lastIndex) == Unknown) {
         last_is_Unknown = true;
     } else {

@@ -284,9 +284,13 @@ TEST(class_trit_set, length){
 }
 
 TEST(class_trit_set, trim){
-
-
-
+    TritSet set(20);
+    set[15] = True;
+    set[10] = False;
+    set.trim(11);
+    ASSERT_TRUE(set[15] == Unknown);
+    ASSERT_TRUE(set.capacity() == 20);
+    ASSERT_TRUE(set.length() == 11);
 }
 
 int main(int argc, char* argv[]) {
