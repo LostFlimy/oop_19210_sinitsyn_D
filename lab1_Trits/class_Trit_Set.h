@@ -7,9 +7,12 @@ using namespace std;
 
 class TritSet{
 private:
+    size_t first_size;
     vector<uint32_t> set;
     size_t size;
     size_t last;
+    bool HaveNotUnknown;
+    bool last_is_changed;
     bool last_is_Unknown;
     size_t lastNotUnknownIndex() const;
 public:
@@ -55,7 +58,7 @@ public:
 
     TritSet operator |(TritSet hsr);
 
-    TritSet operator !();
+    TritSet operator ~();
 
     TritProxy operator [](size_t index);
 
@@ -63,11 +66,13 @@ public:
 
     void shrink();
 
-    size_t length() const;
+    long long length() const;
 
     void trim(size_t lastIndex);
 
     size_t cardinality(Trit value);
+
+    size_t size_cells() const;
 };
 
 

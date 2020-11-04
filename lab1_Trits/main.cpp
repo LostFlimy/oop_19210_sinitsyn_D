@@ -178,8 +178,115 @@ TEST(class_trit_set, index_operator){
     ASSERT_TRUE(set1[2] == False);
     set1[2] = True | set1[2];
     ASSERT_TRUE(set1[2] == True);
-    ASSERT_TRUE(set1[1000] == Unknown);
-    ASSERT_TRUE(set1.capacity() == 30);
+    set1[2] = False & set1[2];
+    ASSERT_TRUE(set1[2] == False);
+    set1[2] = set1[2] | True;
+    ASSERT_TRUE(set1[2] == True);
+}
+
+TEST(class_trit_set, memory_check){
+    TritSet set(20);
+    set[19] = False;
+    set[100] = Unknown;
+    cout << set[120];
+    ASSERT_TRUE(set.capacity() == 20);
+    ASSERT_TRUE(set.size_cells() == 2);
+    set[40] = True;
+    ASSERT_TRUE(set.capacity() == 41);
+    ASSERT_TRUE(set.size_cells() == 3);
+    set[50] = False;
+    ASSERT_TRUE(set.capacity() == 51);
+    ASSERT_TRUE(set.size_cells() == 4);
+}
+
+TEST(class_trit_set, logic_operations){
+    TritSet set1(6);
+    TritSet set2(7);
+    set1[0] = True;
+    set1[1] = False;
+    set1[2] = Unknown;
+    set1[3] = True;
+    set1[4] = Unknown;
+    set1[5] = False;
+    set2[0] = True;
+    set2[1] = True;
+    set2[2] = True;
+    set2[3] = False;
+    set2[4] = False;
+    set2[5] = False;
+    set2[6] = True;
+
+    TritSet setand = set1 & set2;
+    ASSERT_TRUE(setand[0] == True);
+    ASSERT_TRUE(setand[1] == False);
+    ASSERT_TRUE(setand[2] == Unknown);
+    ASSERT_TRUE(setand[3] == False);
+    ASSERT_TRUE(setand[4] == False);
+    ASSERT_TRUE(setand[5] == False);
+    ASSERT_TRUE(setand.size_cells() == 1);
+    ASSERT_TRUE(setand.capacity() == 6);
+
+    TritSet setor = set1 | set2;
+    ASSERT_TRUE(setor[0] == True);
+    ASSERT_TRUE(setor[1] == True);
+    ASSERT_TRUE(setor[2] == True);
+    ASSERT_TRUE(setor[3] == True);
+    ASSERT_TRUE(setor[4] == Unknown);
+    ASSERT_TRUE(setor[5] == False);
+    ASSERT_TRUE(setor[6] == True);
+    ASSERT_TRUE(setor.capacity() == 7);
+    ASSERT_TRUE(setor.size_cells() == 1);
+
+    TritSet setnot = ~set1;
+    ASSERT_TRUE(setnot[0] == False);
+    ASSERT_TRUE(setnot[1] == True);
+    ASSERT_TRUE(setnot[2] == Unknown);
+    ASSERT_TRUE(setnot[3] == False);
+    ASSERT_TRUE(setnot[4] == Unknown);
+    ASSERT_TRUE(setnot[5] == True);
+    ASSERT_TRUE(setnot.size_cells() == 1);
+    ASSERT_TRUE(setnot.capacity() == 6);
+    TritSet set3(50);
+    setand = set1 & set3;
+    setor = set1 | set3;
+    setnot = ~set3;
+    ASSERT_TRUE(setand.capacity() == 6);
+    ASSERT_TRUE(setand.size_cells() == 1);
+    ASSERT_TRUE(setor.capacity() == 50);
+    ASSERT_TRUE(setor.size_cells() == 4);
+    ASSERT_TRUE(setnot.size_cells() == 4);
+    ASSERT_TRUE(setnot.capacity() == 50);
+}
+
+TEST(class_trit_set, shrink){
+    TritSet set(100);
+    set[40] = Unknown;
+    set.shrink();
+    ASSERT_TRUE(set.capacity() == 100);
+    ASSERT_TRUE(set.size_cells() == 7);
+    set[20] = True;
+    set[30] = False;
+    set.shrink();
+    ASSERT_TRUE(set.capacity() == 31);
+    ASSERT_TRUE(set.size_cells() == 2);
+}
+
+TEST(class_trit_set, length){
+    TritSet set(100);
+    set[20] = Unknown;
+    ASSERT_TRUE(set.length() == -1);
+    set[30] = True;
+    ASSERT_TRUE(set.length() == 31);
+    set[10] = False;
+    ASSERT_TRUE(set.length() == 31);
+    set[120] = True;
+    ASSERT_TRUE(set.length() == 121);
+}
+
+TEST(class_trit_set, trim){
+
+
+
 }
 
 int main(int argc, char* argv[]) {
