@@ -23,6 +23,7 @@ TritSet::TritSet(size_t count_of_trits) {
     last = 0;
     last_is_changed = false;
     last_is_Unknown = true;
+    HaveNotUnknown = false;
 }
 
 TritSet::TritSet() {
@@ -32,6 +33,7 @@ TritSet::TritSet() {
     first_size = 0;
     last_is_Unknown = true;
     last_is_changed = false;
+    HaveNotUnknown = false;
 }
 
 Trit TritSet::getAt(size_t index) const {
@@ -42,7 +44,7 @@ Trit TritSet::getAt(size_t index) const {
 
 void TritSet::setAt(size_t index, Trit value) {
     uint32_t set_cell = index / (16);
-    if(index > capacity() - 1){
+    if(index >= capacity()){
         size = index + 1;
         set.resize(set_cell + 1, 0);
     }
@@ -71,7 +73,7 @@ void TritSet::setAt(size_t index, Trit value) {
 
 void TritSet::setAt(size_t index, trit value) {
     uint32_t set_cell = index / (16);
-    if(index > capacity() - 1){
+    if(index >= capacity()){
         size = index + 1;
         set.resize(set_cell + 1, 0);
     }
@@ -151,7 +153,7 @@ TritSet::TritProxy::operator Trit() const {
 }
 
 TritSet::TritProxy &TritSet::TritProxy::operator=(trit hsr) {
-    if(where > set.capacity()){
+    if(where >= set.capacity()){
         if(hsr == Unknown){
             return *this;
         }
@@ -161,7 +163,7 @@ TritSet::TritProxy &TritSet::TritProxy::operator=(trit hsr) {
 }
 
 TritSet::TritProxy &TritSet::TritProxy::operator=(Trit hsr) {
-    if(where > set.capacity()){
+    if(where >= set.capacity()){
         if(hsr == Unknown){
             return *this;
         }
@@ -245,7 +247,7 @@ size_t TritSet::lastNotUnknownIndex() const{
 long long TritSet::length() const {
     size_t curlast = lastNotUnknownIndex();
     if(!HaveNotUnknown){
-        return -1;
+        return 0;
     }
     return (long long)curlast + 1;
 }
@@ -286,7 +288,7 @@ size_t TritSet::cardinality(Trit value) {
 }
 
 size_t TritSet::size_cells() const {
-    return set.size();
+    return (*this).set.size();
 }
 
 

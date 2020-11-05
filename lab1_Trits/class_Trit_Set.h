@@ -5,22 +5,31 @@
 
 using namespace std;
 
-class TritSet{
+class TritSet {
 private:
     size_t first_size;
     vector<uint32_t> set;
     size_t size;
     size_t last;
+
     bool HaveNotUnknown;
     bool last_is_changed;
     bool last_is_Unknown;
+
     size_t lastNotUnknownIndex() const;
+
+    Trit getAt(size_t index) const;
+
+    void setAt(size_t index, Trit value);
+    void setAt(size_t index, trit value);
+
 public:
-    class TritProxy{
+    class TritProxy {
     private:
         TritSet& set;
         size_t where;
         friend class TritSet;
+
     public:
         TritProxy(TritSet& tritSet, size_t index);
         operator Trit() const;
@@ -48,11 +57,6 @@ public:
     [[nodiscard]] size_t capacity() const;
 
     TritSet& operator =(TritSet hsr);
-
-    Trit getAt(size_t index) const;
-
-    void setAt(size_t index, Trit value);
-    void setAt(size_t index, trit value);
 
     TritSet operator &(TritSet hsr);
 
