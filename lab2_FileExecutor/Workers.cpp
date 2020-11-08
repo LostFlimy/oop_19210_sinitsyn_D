@@ -16,7 +16,7 @@ Worker::ReturnType Worker::getOutput() const {
     return outputType;
 }
 
-Worker::WorkerResult readWorker::operation(Worker::WorkerResult &enter) {
+Worker::WorkerResult ReadWorker::operation(Worker::WorkerResult &enter) {
     std::ifstream stream;
     stream.open(filename);
     if(!stream.is_open()){
@@ -32,7 +32,7 @@ Worker::WorkerResult readWorker::operation(Worker::WorkerResult &enter) {
 
 
 
-Worker::WorkerResult writeWorker::operation(Worker::WorkerResult &enter) {
+Worker::WorkerResult WriteWorker::operation(Worker::WorkerResult &enter) {
     std::ofstream stream;
     stream.open(filename);
     if(!stream.is_open()){
@@ -45,7 +45,7 @@ Worker::WorkerResult writeWorker::operation(Worker::WorkerResult &enter) {
     return WorkerResult();
 }
 
-Worker::WorkerResult grepWorker::operation(Worker::WorkerResult &enter) {
+Worker::WorkerResult GrepWorker::operation(Worker::WorkerResult &enter) {
     std::vector<std::string> enterText = enter.getText();
     std::vector<std::string> exitText(0);
     for(const auto& x : enterText){
@@ -57,13 +57,13 @@ Worker::WorkerResult grepWorker::operation(Worker::WorkerResult &enter) {
 }
 
 
-Worker::WorkerResult sortWorker::operation(Worker::WorkerResult &enter) {
+Worker::WorkerResult SortWorker::operation(Worker::WorkerResult &enter) {
     std::vector<std::string> enterText = enter.getText();
     std::sort(enterText.begin(), enterText.end());
     return WorkerResult(enterText);
 }
 
-Worker::WorkerResult replaceWorker::operation(Worker::WorkerResult &enter) {
+Worker::WorkerResult ReplaceWorker::operation(Worker::WorkerResult &enter) {
     std::vector<std::string> enterText = enter.getText();
     for(auto& x : enterText){
         int pos = 0;
@@ -76,7 +76,7 @@ Worker::WorkerResult replaceWorker::operation(Worker::WorkerResult &enter) {
     return WorkerResult(enterText);
 }
 
-Worker::WorkerResult dumpWorker::operation(Worker::WorkerResult &enter) {
+Worker::WorkerResult DumpWorker::operation(Worker::WorkerResult &enter) {
     std::ofstream stream;
     stream.open(filename);
     if(!stream.is_open()){

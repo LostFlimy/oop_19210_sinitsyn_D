@@ -27,10 +27,10 @@ protected:
     explicit Worker(ReturnType input, ReturnType output) : inputType(input), outputType(output){}
 };
 
-class readWorker : public Worker
+class ReadWorker : public Worker
 {
 public:
-    explicit readWorker(std::string filename) : Worker(ReturnType::NONE, ReturnType::TEXT){
+    explicit ReadWorker(std::string filename) : Worker(ReturnType::NONE, ReturnType::TEXT){
         this->filename = std::move(filename);
     }
     WorkerResult operation(WorkerResult& enter) override;
@@ -38,10 +38,10 @@ protected:
     std::string filename;
 };
 
-class writeWorker : public Worker
+class WriteWorker : public Worker
 {
 public:
-    explicit writeWorker(std::string filename) :
+    explicit WriteWorker(std::string filename) :
                          Worker(ReturnType::TEXT, ReturnType::NONE) {
         this->filename = std::move(filename);
     }
@@ -50,10 +50,10 @@ protected:
     std::string filename;
 };
 
-class grepWorker : public Worker
+class GrepWorker : public Worker
 {
 public:
-    explicit grepWorker(std::string word) :
+    explicit GrepWorker(std::string word) :
                         Worker(ReturnType::TEXT, ReturnType::TEXT){
         this->word = std::move(word);
     }
@@ -62,18 +62,18 @@ protected:
     std::string word;
 };
 
-class sortWorker : public Worker
+class SortWorker : public Worker
 {
 public:
-    explicit sortWorker() :
+    explicit SortWorker() :
         Worker(ReturnType:: TEXT, ReturnType::TEXT){}
     WorkerResult operation(WorkerResult& enter) override;
 };
 
-class replaceWorker : public Worker
+class ReplaceWorker : public Worker
 {
 public:
-    explicit replaceWorker(std::string word1, std::string word2) :
+    explicit ReplaceWorker(std::string word1, std::string word2) :
                            Worker(ReturnType::TEXT, ReturnType::TEXT){
         this->word1 = std::move(word1);
         this->word2 = std::move(word2);
@@ -84,10 +84,10 @@ protected:
     std::string word2;
 };
 
-class dumpWorker : public Worker
+class DumpWorker : public Worker
 {
 public:
-    explicit dumpWorker(std::string filename) :
+    explicit DumpWorker(std::string filename) :
                         Worker(ReturnType::TEXT, ReturnType::TEXT){
         this->filename = std::move(filename);
     }
