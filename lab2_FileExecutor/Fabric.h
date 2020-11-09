@@ -34,7 +34,7 @@ private:
 
 template<>
 class Fabric<ReadWorker>{
-private:
+public:
     static std::shared_ptr<Worker> CreateFunc(std::vector<std::string> values){
         return std::make_shared<ReadWorker>(values[0]);
     }
@@ -42,7 +42,7 @@ private:
 
 template<>
 class Fabric<WriteWorker>{
-private:
+public:
     static std::shared_ptr<Worker> CreateFunc(std::vector<std::string> values){
         return std::make_shared<WriteWorker>(values[0]);
     }
@@ -50,7 +50,7 @@ private:
 
 template<>
 class Fabric<SortWorker>{
-private:
+public:
     static std::shared_ptr<Worker> CreateFunc(std::vector<std::string> values){
         return std::make_shared<SortWorker>();
     }
@@ -58,7 +58,7 @@ private:
 
 template<>
 class Fabric<GrepWorker>{
-private:
+public:
     static std::shared_ptr<Worker> CreateFunc(std::vector<std::string> values){
         return std::make_shared<GrepWorker>(values[0]);
     }
@@ -66,7 +66,7 @@ private:
 
 template<>
 class Fabric<DumpWorker>{
-private:
+public:
     static std::shared_ptr<Worker> CreateFunc(std::vector<std::string> values){
         return std::make_shared<DumpWorker>(values[0]);
     }
@@ -74,7 +74,7 @@ private:
 
 template<>
 class Fabric<ReplaceWorker>{
-private:
+public:
     static std::shared_ptr<Worker> CreateFunc(std::vector<std::string> values){
         return std::make_shared<ReplaceWorker>(values[0], values[1]);
     }
