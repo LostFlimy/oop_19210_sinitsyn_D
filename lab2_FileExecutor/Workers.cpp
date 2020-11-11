@@ -42,7 +42,8 @@ Worker::WorkerResult WriteWorker::operation(Worker::WorkerResult &enter) {
     for(const auto& x : exit){
         stream << x;
     }
-    return WorkerResult();
+    std::vector<std::string> text(0);
+    return WorkerResult(text);
 }
 
 Worker::WorkerResult GrepWorker::operation(Worker::WorkerResult &enter) {

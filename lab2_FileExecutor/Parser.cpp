@@ -20,17 +20,35 @@ void Parser::parsing() {
 
     while((std::getline(stream, str)) && (std::regex_search(str.c_str(), result, rx))){
         int key = getnumber(result[1]);
-        workers[key].push_back(result[2]);
-        if(result[2] != "replace")
-            workers[key].push_back(result[3]);
+        if(workers[key] != ""){
+            throw "multiply definition of worker";
+        }
+        workers[key] = result[2];
+        if(result[2] != "replace" && result[2] != "sort")
+            workers_agrs[key].push_back(result[3]);
         else {
-            std::string sstr = result[2];
-            int pos = sstr.find(' ');
-            std::string str1 = sstr.substr(0, pos);
-            sstr.erase(0, pos + 1);
-            std::string str2 = sstr;
-            workers[key].push_back(result[3]);
-            workers[key].push_back(result[4]);
+            if(result[2] == "replace") {
+                std::string sstr = result[3];
+                std::regex _rx("(\\w+)");
+                if(!std::regex_search(sstr.c_str(), result, _rx)){
+                    throw "Bad format of replace";
+                }
+                workers_agrs[key].push_back(result[1]);
+                sstr = result.suffix();
+                if(!std::regex_search(sstr.c_str(), result, _rx)){
+                    throw "Bad format of replace";
+                }
+                workers_agrs[key].push_back(result[1]);
+                sstr = result.suffix();
+                if(!sstr.empty()){
+                    throw "Bad format";
+                }
+            }
+            if(result[2] == "sort") {
+                if(result[3] != ""){
+                    throw "Bad format of sort";
+                }
+            }
         }
     }
     if(str != "csed"){
@@ -41,14 +59,23 @@ void Parser::parsing() {
     while(std::regex_search(str.c_str(), result, rx)){
         order.push_back(getnumber(result[1]));
         std::string sstr = result[1];
-        str.erase(0, sstr.size());
+        str = result.suffix();
+        if(result.prefix() != ""){
+            throw "Bad format";
+        }
     }
     rx = ("([0-9]+)");
     if(std::regex_search(str.c_str(), result, rx)){
         order.push_back(getnumber(result[1]));
+        std::string sstr = result[1];
+        str = result.suffix();
+        if(!str.empty()){
+            throw "Bad format";
+        }
     } else {
-        throw "Bad format in last string";
+            throw "Bad format in last string";
     }
+
 }
 
 int Parser::getnumber(std::string value) {
@@ -61,16 +88,20 @@ int Parser::getnumber(std::string value) {
     int number = 0;
     for(int i = 0; i < value.size(); ++i){
         number *= 10;
-        number += value[i];
+        number += value[i] - 48;
     }
     return number;
 }
 
-std::map<int, std::vector<std::string>> Parser::getWorkers() const {
+std::map<int, std::string> Parser::getWorkers() const {
     return workers;
 }
 
 std::vector<int> Parser::getOrder() const {
     return order;
+}
+
+std::map<int, std::vector<std::string>> Parser::getArgs() const {
+    return workers_agrs;
 }
 
