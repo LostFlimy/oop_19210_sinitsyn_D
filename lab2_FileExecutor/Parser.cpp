@@ -8,20 +8,23 @@ void Parser::parsing() {
     std::ifstream stream;
     stream.open(filename);
     if(!stream.is_open()){
-        throw "Bad name of input file";
+        std::string exception("Bad name");
+        throw exception;
     }
     std::string str;
     std::getline(stream, str);
     if(str != "desc"){
-        throw "Bad format";
+        std::string exception("Bad format");
+        throw exception;
     }
-    std::regex rx("([0-9]+) = (grep|sort|replace|readfile|writefile) ?(.*)");
+    std::regex rx("([0-9]+) = (grep|sort|replace|readfile|writefile|dump) ?(.*)");
     std::cmatch result;
 
     while((std::getline(stream, str)) && (std::regex_search(str.c_str(), result, rx))){
         int key = getnumber(result[1]);
         if(workers[key] != ""){
-            throw "multiply definition of worker";
+            std::string exception("Multiply definition");
+            throw exception;
         }
         workers[key] = result[2];
         if(result[2] != "replace" && result[2] != "sort")
@@ -31,28 +34,33 @@ void Parser::parsing() {
                 std::string sstr = result[3];
                 std::regex _rx("(\\w+)");
                 if(!std::regex_search(sstr.c_str(), result, _rx)){
-                    throw "Bad format of replace";
+                    std::string exception("Bad format of replace");
+                    throw exception;
                 }
                 workers_agrs[key].push_back(result[1]);
                 sstr = result.suffix();
                 if(!std::regex_search(sstr.c_str(), result, _rx)){
-                    throw "Bad format of replace";
+                    std::string exception("Bad format of replace");
+                    throw exception;
                 }
                 workers_agrs[key].push_back(result[1]);
                 sstr = result.suffix();
                 if(!sstr.empty()){
-                    throw "Bad format";
+                    std::string exception("Bad format of replace");
+                    throw exception;
                 }
             }
             if(result[2] == "sort") {
                 if(result[3] != ""){
-                    throw "Bad format of sort";
+                    std::string exception("Bad format of sort");
+                    throw exception;
                 }
             }
         }
     }
     if(str != "csed"){
-        throw "Bad format";
+        std::string exception("Bad format");
+        throw exception;
     }
     rx = ("([0-9]+) - > ");
     std::getline(stream, str);
@@ -61,7 +69,8 @@ void Parser::parsing() {
         std::string sstr = result[1];
         str = result.suffix();
         if(result.prefix() != ""){
-            throw "Bad format";
+            std::string exception("Bad format");
+            throw exception;
         }
     }
     rx = ("([0-9]+)");
@@ -70,20 +79,24 @@ void Parser::parsing() {
         std::string sstr = result[1];
         str = result.suffix();
         if(!str.empty()){
-            throw "Bad format";
+            std::string exception("Bad format");
+            throw exception;
         }
     } else {
-            throw "Bad format in last string";
+        std::string exception("Bad format");
+        throw exception;
     }
 
 }
 
 int Parser::getnumber(std::string value) {
     if(value.size() == 0){
-        throw "On first position of any string not number";
+        std::string exception("On first position of any string not number");
+        throw exception;
     }
     if(value[0] == '-'){
-        throw "Negative number";
+        std::string exception("Negative number");
+        throw exception;
     }
     int number = 0;
     for(int i = 0; i < value.size(); ++i){

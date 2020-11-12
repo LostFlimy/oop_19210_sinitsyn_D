@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
     Parser pars(argv[1]);
     try{
         pars.parsing();
-    } catch(char* a) {
+    } catch(std::string a) {
         std::cout << a << std::endl;
         return -1;
     }
@@ -24,14 +24,19 @@ int main(int argc, char** argv) {
         std::map<int, std::string> workers = pars.getWorkers();
         std::map<int, std::vector<std::string>> args = pars.getArgs();
         if(workers[order[0]] != "readfile"){
-            throw "Can not start with first worker";
+            std::string exception("Can not start with first worker");
+            throw exception;
         }
         Worker::WorkerResult result;
         for(int i = 0; i < order.size(); ++i){
             std::shared_ptr<Worker> worker = Factory.Create(workers[order[i]], args[order[i]]);
             result = worker->operation(result);
         }
-    } catch (char* a){
+        if(workers[order[order.size() - 1]] != "writefile"){
+            std::string exception("Can not end with last worker");
+            throw exception;
+        }
+    } catch (std::string a){
         std::cout << a << std::endl;
         return -1;
     }

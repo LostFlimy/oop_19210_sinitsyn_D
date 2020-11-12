@@ -20,7 +20,8 @@ Worker::WorkerResult ReadWorker::operation(Worker::WorkerResult &enter) {
     std::ifstream stream;
     stream.open(filename);
     if(!stream.is_open()){
-        throw "Bad name input file";
+        std::string exception("Bad name of  input file");
+        throw exception;
     }
     std::vector<std::string> exit(0);
     std::string x;
@@ -36,11 +37,12 @@ Worker::WorkerResult WriteWorker::operation(Worker::WorkerResult &enter) {
     std::ofstream stream;
     stream.open(filename);
     if(!stream.is_open()){
-        throw "Bad name of output file in writeWorker";
+        std::string exception("Bad name of output file for writeworker");
+        throw exception;
     }
     std::vector<std::string> exit = enter.getText();
     for(const auto& x : exit){
-        stream << x;
+        stream << x << std::endl;
     }
     std::vector<std::string> text(0);
     return WorkerResult(text);
@@ -81,7 +83,8 @@ Worker::WorkerResult DumpWorker::operation(Worker::WorkerResult &enter) {
     std::ofstream stream;
     stream.open(filename);
     if(!stream.is_open()){
-        throw "Bad name of output file in dumpWorker";
+        std::string exception("Bad name of output file for dumpworker");
+        throw exception;
     }
     std::vector<std::string> exit = enter.getText();
     for(const auto& x : exit){
