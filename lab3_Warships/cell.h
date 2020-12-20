@@ -1,16 +1,15 @@
 #pragma once
-#include<iostream>
+
+enum class status{
+    CLEAR, SHADED, DAMAGE, SHIP
+};
 
 class Cell {
 public:
-    enum class status{
-        CLEAR, SHADED, PENETRATION, SHIP
-    };
     status getStatus() const;
     void setStatus(status st);
-    int x;
-    int y;
     status st;
-    Cell(status st, int x, int y);
+    Cell(status st);
+    Cell();
 };
 

@@ -1,22 +1,24 @@
 #pragma once
-#include <iostream>
 #include <vector>
+#include <map>
 
-class ship {
+class Ship {
 public:
     enum class route{
         X, Y
     };
 protected:
-    std::size_t size;
+    size_t size;
     int x;
     int y;
     size_t health;
     route direction;
     std::vector<bool> cells;
 public:
-    ship(int _x, int _y, route _direction, size_t _size);
+    Ship(int _x, int _y, route _direction, size_t _size);
+    size_t getSize() const;
     size_t getHealth() const;
+    std::vector<std::pair<int, int>> where() const;
     bool damage(int _x, int _y);
 };
 

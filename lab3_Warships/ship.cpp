@@ -1,6 +1,6 @@
 #include "ship.h"
 
-ship::ship(int _x, int _y, ship::route _direction, size_t _size) {
+Ship::Ship(int _x, int _y, Ship::route _direction, size_t _size) {
     this->x = _x;
     this->y = _y;
     this->direction = _direction;
@@ -9,11 +9,15 @@ ship::ship(int _x, int _y, ship::route _direction, size_t _size) {
     cells.resize(_size, true);
 }
 
-size_t ship::getHealth() const {
+size_t Ship::getHealth() const {
     return health;
 }
 
-bool ship::damage(int _x, int _y) {
+size_t Ship::getSize() const {
+    return size;
+}
+
+bool Ship::damage(int _x, int _y) {
     if(direction == route::X){
         if(_y != this->y) {
             return false;
@@ -36,4 +40,21 @@ bool ship::damage(int _x, int _y) {
         health -= 1;
         return true;
     }
+}
+
+std::vector<std::pair<int, int>> Ship::where() const{
+    std::vector<std::pair<int, int>> res;
+    if(direction == route::X) {
+        for(int i = 0; i < size; ++i){
+            res[i].first = this->x + i;
+            res[i].second = this->y;
+        }
+    }
+    if(direction == route::Y) {
+        for(int i = 0; i < size; ++i){
+            res[i].first = this->x;
+            res[i].second = this->y + i;
+        }
+    }
+    return res;
 }
