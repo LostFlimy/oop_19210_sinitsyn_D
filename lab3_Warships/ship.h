@@ -9,12 +9,12 @@ public:
     };
 protected:
     size_t size;
-    int x;
-    int y;
     size_t health;
-    route direction;
     std::vector<bool> cells;
 public:
+    int x;
+    int y;
+    route direction;
     Ship(int _x, int _y, route _direction, size_t _size);
     size_t getSize() const;
     size_t getHealth() const;

@@ -45,7 +45,29 @@ std::pair<int, int> HardBot::shoot() {
     return {x,y};
 }
 
-std::pair<int, int> Human::shoot(int x, int y) {
+std::pair<int, int> Human::shoot() {
+    std::string strx, stry;
+    int x(-1), y(-1);
+    std::string str;
+    std::cin >> str;
+    std::regex rx("([A-J])([1-9]+)");
+    std::cmatch result;
+    if(std::regex_search(str.c_str(), result, rx)) {
+        std::string strx = result[1];
+        std::string stry = result[2];
+        x = (int)strx[0] - (int)'A';
+        if(stry.size() == 1) {
+            y = (int)stry[0] - (int)('1');
+        }
+        if(stry.size() == 2) {
+            if(stry[0] == '1' && stry[1] == '0') {
+                y = 9;
+            }
+        }
+    }
+    if(y == -1 || x == -1) {
+        return {-1, -1};
+    }
     return {x,y};
 }
 
