@@ -45,6 +45,21 @@ std::pair<int, int> HardBot::shoot() {
     return {x,y};
 }
 
+HardBot::HardBot(size_t count_of_ships) {
+    name = "hard_bot";
+    this->count_of_ships = count_of_ships;
+    for(int i = 0; i < count_of_ships; ++i){
+        for(int j = 0; j< count_of_ships; ++j){
+            your_field[i][j].setStatus(status::CLEAR);
+            enemy_field[i][j].setStatus(status::CLEAR);
+        }
+    }
+}
+
+bool HardBot::place_ship() {
+    return false;
+}
+
 std::pair<int, int> Human::shoot() {
     std::string strx, stry;
     int x(-1), y(-1);
@@ -71,6 +86,20 @@ std::pair<int, int> Human::shoot() {
     return {x,y};
 }
 
+Human::Human(size_t count_of_ships) {
+    this->count_of_ships = count_of_ships;
+    for(int i = 0; i < count_of_ships; ++i){
+        for(int j = 0; j< count_of_ships; ++j){
+            your_field[i][j].setStatus(status::CLEAR);
+            enemy_field[i][j].setStatus(status::CLEAR);
+        }
+    }
+}
+
+bool Human::place_ship() {
+    return false;
+}
+
 std::pair<int, int> EasyBot::shoot() {
     srand(time(0));
     int x = rand() % 10;
@@ -82,7 +111,8 @@ std::pair<int, int> EasyBot::shoot() {
     return {x,y};
 }
 
-Player::Player(size_t count_of_ships) {
+EasyBot::EasyBot(size_t count_of_ships) {
+    name = "easy_bot";
     this->count_of_ships = count_of_ships;
     for(int i = 0; i < count_of_ships; ++i){
         for(int j = 0; j< count_of_ships; ++j){
@@ -91,3 +121,16 @@ Player::Player(size_t count_of_ships) {
         }
     }
 }
+
+bool EasyBot::place_ship() {
+    return false;
+}
+
+Player::Player() {
+    last_x1 = 100;
+    last_x2 = 100;
+    last_y1 = 100;
+    last_y2 = 100;
+    last_hit = false;
+}
+
