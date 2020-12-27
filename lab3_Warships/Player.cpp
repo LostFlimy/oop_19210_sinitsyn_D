@@ -56,8 +56,36 @@ HardBot::HardBot(size_t count_of_ships) {
     }
 }
 
-bool HardBot::place_ship() {
-    return false;
+bool HardBot::place_ship(size_t size) {
+    srand(time(0));
+    int x = rand() % 10;
+    int y = rand() % 10;
+    int direct = rand() % 2;
+    if((x + direct * (size - 1)) > 9 || (y + (direct - 1) * (size - 1)) > 9)
+        return false;
+    for(int i = 0; i < size; ++i){
+        if(your_field[x + i * direct][y + i*(direct + 1)].getStatus() == status::SHIP){
+            return false;
+        }
+    }
+    for(int i = 0; i < size; ++i){
+        if(your_field[x + i * direct + 1][y + i*(direct + 1)].getStatus() == status::SHIP ||
+                your_field[x + i * direct - 1][y + i*(direct + 1)].getStatus() == status::SHIP ||
+                your_field[x + i * direct + 1][y + i*(direct + 1) + 1].getStatus() == status::SHIP ||
+                your_field[x + i * direct + 1][y + i*(direct + 1) - 1].getStatus() == status::SHIP ||
+                your_field[x + i * direct - 1][y + i*(direct + 1) - 1].getStatus() == status::SHIP ||
+                your_field[x + i * direct - 1][y + i*(direct + 1) + 1].getStatus() == status::SHIP ||
+                your_field[x + i * direct][y + i*(direct + 1) - 1].getStatus() == status::SHIP ||
+                your_field[x + i * direct][y + i*(direct + 1) + 1].getStatus() == status::SHIP) {
+            return false;
+        }
+    }
+    for(int i = 0; i < size; ++i) {
+        your_field[x + i * direct][y + i*(direct + 1)].setStatus(status::SHIP);
+    }
+    Ship::route direction = ((direct == 1)? (Ship::route::X) : (Ship::route::Y));
+    your_ships.push_back(Ship(x, y, direction, size));
+    return true;
 }
 
 std::pair<int, int> Human::shoot() {
@@ -96,8 +124,49 @@ Human::Human(size_t count_of_ships) {
     }
 }
 
-bool Human::place_ship() {
-    return false;
+bool Human::place_ship(size_t size) {
+    int x1, x2, y1, y2;
+    std::cin >> x1 >> y1 >> x2 >> y2;
+    if(x1 > x2){
+        int k = x1;
+        x1 = x2;
+        x2 = k;
+    }
+    if(y1 > y2){
+        int k = y1;
+        y1 = y2;
+        y2 = k;
+    }
+    int direct = ((x1 < x2) ? 1 : 0);
+    if(((x2 - x1) > size) || ((y2 - y1) > size)){
+        std::cout << "Incorrect input" << std::endl;
+        return false;
+    }
+    if((x1 + direct * (size - 1)) > 9 || (y1 + (direct - 1) * (size - 1)) > 9)
+        return false;
+    for(int i = 0; i < size; ++i){
+        if(your_field[x1 + i * direct][y1 + i*(direct + 1)].getStatus() == status::SHIP){
+            return false;
+        }
+    }
+    for(int i = 0; i < size; ++i){
+        if(your_field[x1 + i * direct + 1][y1 + i*(direct + 1)].getStatus() == status::SHIP ||
+           your_field[x1 + i * direct - 1][y1 + i*(direct + 1)].getStatus() == status::SHIP ||
+           your_field[x1 + i * direct + 1][y1 + i*(direct + 1) + 1].getStatus() == status::SHIP ||
+           your_field[x1 + i * direct + 1][y1 + i*(direct + 1) - 1].getStatus() == status::SHIP ||
+           your_field[x1 + i * direct - 1][y1 + i*(direct + 1) - 1].getStatus() == status::SHIP ||
+           your_field[x1 + i * direct - 1][y1 + i*(direct + 1) + 1].getStatus() == status::SHIP ||
+           your_field[x1 + i * direct][y1 + i*(direct + 1) - 1].getStatus() == status::SHIP ||
+           your_field[x1 + i * direct][y1 + i*(direct + 1) + 1].getStatus() == status::SHIP) {
+            return false;
+        }
+    }
+    for(int i = 0; i < size; ++i) {
+        your_field[x1 + i * direct][y1 + i*(direct + 1)].setStatus(status::SHIP);
+    }
+    Ship::route direction = ((direct == 1)? (Ship::route::X) : (Ship::route::Y));
+    your_ships.push_back(Ship(x1, y1, direction, size));
+    return true;
 }
 
 std::pair<int, int> EasyBot::shoot() {
@@ -122,8 +191,36 @@ EasyBot::EasyBot(size_t count_of_ships) {
     }
 }
 
-bool EasyBot::place_ship() {
-    return false;
+bool EasyBot::place_ship(size_t size) {
+    srand(time(0));
+    int x = rand() % 10;
+    int y = rand() % 10;
+    int direct = rand() % 2;
+    if((x + direct * (size - 1)) > 9 || (y + (direct - 1) * (size - 1)) > 9)
+        return false;
+    for(int i = 0; i < size; ++i){
+        if(your_field[x + i * direct][y + i*(direct + 1)].getStatus() == status::SHIP){
+            return false;
+        }
+    }
+    for(int i = 0; i < size; ++i){
+        if(your_field[x + i * direct + 1][y + i*(direct + 1)].getStatus() == status::SHIP ||
+           your_field[x + i * direct - 1][y + i*(direct + 1)].getStatus() == status::SHIP ||
+           your_field[x + i * direct + 1][y + i*(direct + 1) + 1].getStatus() == status::SHIP ||
+           your_field[x + i * direct + 1][y + i*(direct + 1) - 1].getStatus() == status::SHIP ||
+           your_field[x + i * direct - 1][y + i*(direct + 1) - 1].getStatus() == status::SHIP ||
+           your_field[x + i * direct - 1][y + i*(direct + 1) + 1].getStatus() == status::SHIP ||
+           your_field[x + i * direct][y + i*(direct + 1) - 1].getStatus() == status::SHIP ||
+           your_field[x + i * direct][y + i*(direct + 1) + 1].getStatus() == status::SHIP) {
+            return false;
+        }
+    }
+    for(int i = 0; i < size; ++i) {
+        your_field[x + i * direct][y + i*(direct + 1)].setStatus(status::SHIP);
+    }
+    Ship::route direction = ((direct == 1)? (Ship::route::X) : (Ship::route::Y));
+    your_ships.push_back(Ship(x, y, direction, size));
+    return true;
 }
 
 Player::Player() {
