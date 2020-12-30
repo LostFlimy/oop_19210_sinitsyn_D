@@ -17,6 +17,8 @@ private:
     const size_t count_of_ship = 10;
     std::unique_ptr<Player> plr1;
     std::unique_ptr<Player> plr2;
+    void DrawView(size_t number);
+    void RestoreInfo();
 
     // o = CLEAR, x = DAMAGE, w = SHADED, T = SHIP
 
@@ -28,7 +30,4 @@ public:
     Game(size_t size_of_field);
     void GameInitial();
     void GameFight();
-    void DrawView(size_t number);
-    void RestoreInfo();
 };
-

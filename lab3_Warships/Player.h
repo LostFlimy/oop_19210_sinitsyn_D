@@ -12,6 +12,7 @@
 class Player {
 protected:
     Player();
+    bool CheckShip(int x, int y, int direct, size_t size);
 public:
     std::string name;
     int last_x1;
@@ -23,7 +24,6 @@ public:
     std::vector<std::vector<Cell>> enemy_field;
     std::vector<std::vector<Cell>> your_field;
     std::vector<Ship> your_ships;
-    bool CheckShip(int x, int y, int direct, size_t size);
     virtual std::pair<int, int> shoot() = 0;
     virtual bool place_ship(size_t size) = 0;
 };

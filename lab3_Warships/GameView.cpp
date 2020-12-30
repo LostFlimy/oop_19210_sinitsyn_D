@@ -203,8 +203,8 @@ void Game::RestoreInfo() {
                 plr2_enemy_field[i][j] = 'w';
             }
             if(plr1->your_field[i][j].getStatus() == status::DAMAGE) {
-                plr1_friend_field[i][j] = 'x';
-                plr2_enemy_field[i][j] = 'x';
+                plr1_friend_field[i][j] = 'X';
+                plr2_enemy_field[i][j] = 'X';
             }
             if(plr1->your_field[i][j].getStatus() == status::SHIP) {
                 plr1_friend_field[i][j] = 'T';
@@ -214,8 +214,8 @@ void Game::RestoreInfo() {
                 plr1_enemy_field[i][j] = 'w';
             }
             if(plr2->your_field[i][j].getStatus() == status::DAMAGE) {
-                plr2_friend_field[i][j] = 'x';
-                plr1_enemy_field[i][j] = 'x';
+                plr2_friend_field[i][j] = 'X';
+                plr1_enemy_field[i][j] = 'X';
             }
             if(plr2->your_field[i][j].getStatus() == status::SHIP) {
                 plr2_friend_field[i][j] = 'T';
