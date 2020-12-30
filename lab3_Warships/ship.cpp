@@ -6,7 +6,6 @@ Ship::Ship(int _x, int _y, Ship::route _direction, size_t _size) {
     this->direction = _direction;
     this->size = _size;
     this->health = _size;
-    cells.resize(_size, true);
 }
 
 size_t Ship::getHealth() const {
@@ -25,7 +24,9 @@ bool Ship::damage(int _x, int _y) {
         if(_x >= x + size){
             return false;
         }
-        cells[_x - x] = false;
+        if(_x < x){
+            return false;
+        }
         health -= 1;
         return true;
     }
@@ -36,14 +37,17 @@ bool Ship::damage(int _x, int _y) {
         if(_y >= y + size){
             return false;
         }
-        cells[_y - y] = false;
+        if(_y < y) {
+            return false;
+        }
         health -= 1;
         return true;
     }
+    return true;
 }
 
 std::vector<std::pair<int, int>> Ship::where() const{
-    std::vector<std::pair<int, int>> res;
+    std::vector<std::pair<int, int>> res(size);
     if(direction == route::X) {
         for(int i = 0; i < size; ++i){
             res[i].first = this->x + i;

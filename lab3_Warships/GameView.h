@@ -1,5 +1,6 @@
 #pragma once
 #include "Handler.h"
+#include <memory>
 
 //size of big ship = 4
 //size of medium_big ship = 3;
@@ -8,13 +9,14 @@
 
 class Game {
 private:
+    const size_t size_of_field;
     const size_t count_of_small = 4;
     const size_t count_of_medium_small = 3;
     const size_t count_of_medium_big = 2;
     const size_t count_of_big = 1;
     const size_t count_of_ship = 10;
-    Player& plr1;
-    Player& plr2;
+    std::unique_ptr<Player> plr1;
+    std::unique_ptr<Player> plr2;
 
     // o = CLEAR, x = DAMAGE, w = SHADED, T = SHIP
 
@@ -23,8 +25,10 @@ private:
     std::vector<std::vector<char>> plr2_friend_field;
     std::vector<std::vector<char>> plr2_enemy_field;
 public:
-    Game(Player& player1, Player& player2, size_t size_of_field);
+    Game(size_t size_of_field);
     void GameInitial();
     void GameFight();
+    void DrawView(size_t number);
+    void RestoreInfo();
 };
 

@@ -10,7 +10,6 @@ public:
 protected:
     size_t size;
     size_t health;
-    std::vector<bool> cells;
 public:
     int x;
     int y;
