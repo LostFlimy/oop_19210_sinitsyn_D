@@ -2,35 +2,178 @@
 
 
 std::pair<int, int> HardBot::shoot() {
+    if(last_x1 != -1) {
+        if ((last_x1 == last_x2) && (last_y1 == last_y2)) {
+            if (enemy_field[last_x1][last_y1].getStatus() == status::DAMAGE) {
+                last_hit = true;
+            } else {
+                last_hit = false;
+            }
+        }
+        if (last_x1 != last_x2) {
+            if (enemy_field[last_x1][last_y1].getStatus() == status::SHADED) {
+                if (((last_x2 < 9) && (enemy_field[last_x2 + 1][last_y1].getStatus() == status::SHADED)) ||
+                                                                                            last_x2 == 9) {
+                    if ((last_x2 - last_x1 == 1) &&
+                        ((last_y1 < 9 && enemy_field[last_x2][last_y1 + 1].getStatus() == status::SHADED) ||
+                         last_y1 == 9) &&
+                        ((last_y1 > 0 && enemy_field[last_x2][last_y1 - 1].getStatus() == status::SHADED) ||
+                         last_y1 == 0)) {
+                        last_hit = false;
+                    }
+                    if ((last_x2 - last_x1 > 1)) {
+                        last_hit = false;
+                    }
+                    if ((last_x2 - last_x1 == 1) &&
+                        ((last_y1 < 9 && enemy_field[last_x2][last_y1 + 1].getStatus() == status::CLEAR) ||
+                         (last_y1 > 0 && enemy_field[last_x2][last_y1 - 1].getStatus() == status::CLEAR))) {
+                        last_x1 = last_x2;
+                        last_hit = true;
+                    }
+                } else {
+                    if (last_x2 - last_x1 == 1) {
+                        last_x1 = last_x2;
+                        last_hit = true;
+                    }
+                    if (last_x2 - last_x1 > 1) {
+                        last_x1++;
+                        last_hit = true;
+                    }
+                }
+            }
+            if (enemy_field[last_x2][last_y1].getStatus() == status::SHADED) {
+                if (((last_x1 > 0) && (enemy_field[last_x1 - 1][last_y1].getStatus() == status::SHADED)) ||
+                    last_x1 == 0) {
+                    if ((last_x2 - last_x1 == 1) &&
+                        ((last_y1 < 9 && enemy_field[last_x1][last_y1 + 1].getStatus() == status::SHADED) ||
+                         last_y1 == 9) &&
+                        ((last_y1 > 0 && enemy_field[last_x1][last_y1 - 1].getStatus() == status::SHADED) ||
+                         last_y1 == 0)) {
+                        last_hit = false;
+                    }
+                    if ((last_x2 - last_x1 > 1)) {
+                        last_hit = false;
+                    }
+                    if ((last_x2 - last_x1 == 1) &&
+                        ((last_y1 < 9 && enemy_field[last_x1][last_y1 + 1].getStatus() == status::CLEAR) ||
+                         (last_y1 > 0 && enemy_field[last_x1][last_y1 - 1].getStatus() == status::CLEAR))) {
+                        last_x2 = last_x1;
+                        last_hit = true;
+                    }
+                } else {
+                    if (last_x2 - last_x1 == 1) {
+                        last_x2 = last_x1;
+                        last_hit = true;
+                    }
+                    if (last_x2 - last_x1 > 1) {
+                        last_x2--;
+                        last_hit = true;
+                    }
+                }
+            }
+        }
+        if (last_y1 != last_y2) {
+            if (enemy_field[last_x1][last_y1].getStatus() == status::SHADED) {
+                if (((last_y2 < 9) && (enemy_field[last_x2][last_y2 + 1].getStatus() == status::SHADED)) ||
+                    last_y2 == 9) {
+                    if ((last_y2 - last_y1 == 1) &&
+                        ((last_x1 < 9 && enemy_field[last_x1 + 1][last_y2].getStatus() == status::SHADED) ||
+                         last_x1 == 9) &&
+                        ((last_x1 > 0 && enemy_field[last_x1 - 1][last_y2].getStatus() == status::SHADED) ||
+                         last_x1 == 0)) {
+                        last_hit = false;
+                    }
+                    if ((last_y2 - last_y1 > 1)) {
+                        last_hit = false;
+                    }
+                    if ((last_y2 - last_y1 == 1) &&
+                        ((last_x1 < 9 && enemy_field[last_x1 + 1][last_y2].getStatus() == status::CLEAR) ||
+                         (last_x1 > 0 && enemy_field[last_x1 - 1][last_y2].getStatus() == status::CLEAR))) {
+                        last_y1 = last_y2;
+                        last_hit = true;
+                    }
+                } else {
+                    if (last_y2 - last_y1 == 1) {
+                        last_y1 = last_y2;
+                        last_hit = true;
+                    }
+                    if (last_y2 - last_y1 > 1) {
+                        last_y1++;
+                        last_hit = true;
+                    }
+                }
+            }
+            if (enemy_field[last_x1][last_y2].getStatus() == status::SHADED) {
+                if (((last_y1 > 0) && (enemy_field[last_x1][last_y1 - 1].getStatus() == status::SHADED)) ||
+                    last_y1 == 0) {
+                    if ((last_y2 - last_y1 == 1) &&
+                        ((last_x1 < 9 && enemy_field[last_x1 + 1][last_y1].getStatus() == status::SHADED) ||
+                         last_x1 == 9) &&
+                        ((last_x1 > 0 && enemy_field[last_x1 - 1][last_y1].getStatus() == status::SHADED) ||
+                         last_x1 == 0)) {
+                        last_hit = false;
+                    }
+                    if ((last_y2 - last_y1 > 1)) {
+                        last_hit = false;
+                    }
+                    if ((last_y2 - last_y1 == 1) &&
+                        ((last_x1 < 9 && enemy_field[last_x1 + 1][last_y1].getStatus() == status::CLEAR) ||
+                         (last_y1 > 0 && enemy_field[last_x1 - 1][last_y1].getStatus() == status::CLEAR))) {
+                        last_y2 = last_y1;
+                        last_hit = true;
+                    }
+                } else {
+                    if (last_y2 - last_y1 == 1) {
+                        last_y2 = last_y1;
+                        last_hit = true;
+                    }
+                    if (last_y2 - last_y1 > 1) {
+                        last_y2--;
+                        last_hit = true;
+                    }
+                }
+            }
+        }
+    }
     if(last_hit == true) {
         if (last_x1 == last_x2 && last_y1 == last_y2) {
             if ((last_x1 < 9) && (enemy_field[last_x1 + 1][last_y1].getStatus() == status::CLEAR)) {
-                return {last_x1 + 1, last_y1};
+                last_x2 = last_x1 + 1;
+                return {last_x1, last_y1};
             }
             if ((last_x1 > 0) && (enemy_field[last_x1 - 1][last_y1].getStatus() == status::CLEAR)) {
-                return {last_x1 - 1, last_y1};
+                last_x2 = last_x1;
+                last_x1 = last_x1 - 1;
+                return {last_x1, last_y1};
             }
             if ((last_y1 < 9) && (enemy_field[last_x1][last_y1 + 1].getStatus() == status::CLEAR)) {
-                return {last_x1, last_y1 + 1};
+                last_y2 = last_y1 + 1;
+                return {last_x1, last_y1};
             }
             if ((last_y1 > 0) && (enemy_field[last_x1][last_y1 - 1].getStatus() == status::CLEAR)) {
-                return {last_x1, last_y1 - 1};
+                last_y2 = last_y1;
+                last_y1 = last_y1 - 1;
+                return {last_x1, last_y1};
             }
         } else {
             if (last_x1 == last_x2) {
                 if ((last_y1 > 0) && (enemy_field[last_x1][last_y1 - 1].getStatus() == status::CLEAR)) {
-                    return {last_x1, last_y1 - 1};
+                    last_y1 = last_y1 - 1;
+                    return {last_x1, last_y1};
                 }
                 if ((last_y2 < 9) && (enemy_field[last_x2][last_y2 + 1].getStatus() == status::CLEAR)) {
-                    return {last_x2, last_y2 + 1};
+                    last_y2 = last_y2 + 1;
+                    return {last_x2, last_y2};
                 }
             }
             if (last_y1 == last_y2) {
                 if ((last_x1 > 0) && (enemy_field[last_x1 - 1][last_y1].getStatus() == status::CLEAR)) {
-                    return {last_x1 - 1, last_y1};
+                    last_x1 = last_x1 - 1;
+                    return {last_x1, last_y1};
                 }
                 if ((last_x2 < 9) && (enemy_field[last_x2 + 1][last_y2].getStatus() == status::CLEAR)) {
-                    return {last_x2 + 1, last_y2};
+                    last_x2 = last_x2 + 1;
+                    return {last_x2, last_y2};
                 }
             }
         }
@@ -42,6 +185,11 @@ std::pair<int, int> HardBot::shoot() {
         x = rand() % 10;
         y = rand() % 10;
     }
+    last_x1 = x;
+    last_x2 = x;
+    last_y1 = y;
+    last_y2 = y;
+    last_hit = false;
     return {x,y};
 }
 
@@ -54,6 +202,11 @@ HardBot::HardBot(size_t count_of_ships) {
             enemy_field[i][j].setStatus(status::CLEAR);
         }
     }
+    last_x1 = -1;
+    last_x2 = -1;
+    last_y1 = -1;
+    last_y2 = -1;
+    last_hit = false;
 }
 
 bool HardBot::place_ship(size_t size) {
@@ -231,11 +384,6 @@ Player::Player() {
     for(int i = 0; i < 10; ++i) {
         enemy_field[i].resize(10);
     }
-    last_x1 = 100;
-    last_x2 = 100;
-    last_y1 = 100;
-    last_y2 = 100;
-    last_hit = false;
 }
 
 bool Player::CheckShip(int x, int y, int direct, size_t size) {
@@ -257,5 +405,9 @@ bool Player::CheckShip(int x, int y, int direct, size_t size) {
         return true;
     }
     return false;
+}
+
+size_t Player::getCountOfShips() {
+    return count_of_ships;
 }
 

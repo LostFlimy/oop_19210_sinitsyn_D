@@ -144,19 +144,33 @@ void Game::GameFight() {
     Handler hand(*plr1, *plr2);
     while(true) {
         std::cout << "Player1 - your turn to shoot, chose cell x y :" << std::endl;
-        if(hand.step(hand.plr1, hand.plr2)) {
-            std::cout << "Player1 you win!!!" << std::endl;
-            break;
+        while(hand.step(hand.plr1, hand.plr2)) {
+            RestoreInfo();
+            std::cout << "success, try again!" << std::endl;
+            DrawView(1);
+            size_t health = 0;
+            for(auto x : plr2->your_ships) {
+                health += x.getHealth();
+            }
+            if(health == 0) {
+                std::cout << "Player1 Win!!!" << std::endl;
+                return;
+            }
         }
-        RestoreInfo();
-        DrawView(1);
         std::cout << "Player2 - your turn to shoot, chose cell x y :" << std::endl;
-        if(hand.step(hand.plr2, hand.plr1)) {
-            std::cout << "Player2 you win!!!" << std::endl;
-            break;
+        while(hand.step(hand.plr2, hand.plr1)) {
+            RestoreInfo();
+            std::cout << "success, try again!" << std::endl;
+            DrawView(2);
+            size_t health = 0;
+            for(auto x : plr1->your_ships) {
+                health += x.getHealth();
+            }
+            if(health == 0) {
+                std::cout << "Player2 Win!!!" << std::endl;
+                return;
+            }
         }
-        RestoreInfo();
-        DrawView(2);
     }
 }
 
