@@ -49,7 +49,7 @@ Game::Game(size_t size_of_field) :size_of_field(size_of_field) {
 void Game::GameInitial() {
     DrawView(1);
     for(int i = 0; i < count_of_big; ++i) {
-        if(plr1->name != "easy_bot" && plr1->name != "hard_bot"){
+        if(plr1->getName() != "easy_bot" && plr1->getName() != "hard_bot"){
             std::cout << "please choose position for 4-ship" << std::endl;
         }
         bool complete_plr1 = plr1->place_ship(4);
@@ -61,7 +61,7 @@ void Game::GameInitial() {
         DrawView(1);
     }
     for(int i = 0; i < count_of_medium_big; ++i) {
-        if(plr1->name != "easy_bot" && plr1->name != "hard_bot"){
+        if(plr1->getName() != "easy_bot" && plr1->getName() != "hard_bot"){
             std::cout << "please choose position for 3-ship" << std::endl;
         }
         bool complete_plr1 = plr1->place_ship(3);
@@ -72,7 +72,7 @@ void Game::GameInitial() {
         DrawView(1);
     }
     for(int i = 0; i < count_of_medium_small; ++i) {
-        if(plr1->name != "easy_bot" && plr1->name != "hard_bot"){
+        if(plr1->getName() != "easy_bot" && plr1->getName() != "hard_bot"){
             std::cout << "please choose position for 2-ship" << std::endl;
         }
         bool complete_plr1 = plr1->place_ship(2);
@@ -83,7 +83,7 @@ void Game::GameInitial() {
         DrawView(1);
     }
     for(int i = 0; i < count_of_small; ++i){
-        if(plr1->name != "easy_bot" && plr1->name != "hard_bot"){
+        if(plr1->getName() != "easy_bot" && plr1->getName() != "hard_bot"){
             std::cout << "please choose position for 1-ship" << std::endl;
         }
         bool complete_plr1 = plr1->place_ship(1);
@@ -95,7 +95,7 @@ void Game::GameInitial() {
     }
 
     for(int i = 0; i < count_of_big; ++i) {
-        if(plr2->name != "easy_bot" && plr2->name != "hard_bot"){
+        if(plr2->getName() != "easy_bot" && plr2->getName() != "hard_bot"){
             std::cout << "please choose position for 4-ship" << std::endl;
         }
         bool complete_plr2 = plr2->place_ship(4);
@@ -106,7 +106,7 @@ void Game::GameInitial() {
         DrawView(2);
     }
     for(int i = 0; i < count_of_medium_big; ++i) {
-        if(plr2->name != "easy_bot" && plr2->name != "hard_bot"){
+        if(plr2->getName() != "easy_bot" && plr2->getName() != "hard_bot"){
             std::cout << "please choose position for 3-ship" << std::endl;
         }
         bool complete_plr2 = plr2->place_ship(3);
@@ -117,7 +117,7 @@ void Game::GameInitial() {
         DrawView(2);
     }
     for(int i = 0; i < count_of_medium_small; ++i) {
-        if(plr2->name != "easy_bot" && plr2->name != "hard_bot"){
+        if(plr2->getName() != "easy_bot" && plr2->getName() != "hard_bot"){
             std::cout << "please choose position for 2-ship" << std::endl;
         }
         bool complete_plr2 = plr2->place_ship(2);
@@ -128,7 +128,7 @@ void Game::GameInitial() {
         DrawView(2);
     }
     for(int i = 0; i < count_of_small; ++i){
-        if(plr2->name != "easy_bot" && plr2->name != "hard_bot"){
+        if(plr2->getName() != "easy_bot" && plr2->getName() != "hard_bot"){
             std::cout << "please choose position for 1-ship" << std::endl;
         }
         bool complete_plr2 = plr2->place_ship(1);
@@ -143,28 +143,40 @@ void Game::GameInitial() {
 void Game::GameFight() {
     Handler hand(*plr1, *plr2);
     while(true) {
+
+        for(int i = 0; i < 10; ++i) {
+            std::cout << std::endl;
+        }
         std::cout << "Player1 - your turn to shoot, chose cell x y :" << std::endl;
+        RestoreInfo();
+        DrawView(1);
         while(hand.step(hand.plr1, hand.plr2)) {
             RestoreInfo();
             std::cout << "success, try again!" << std::endl;
             DrawView(1);
             size_t health = 0;
-            for(auto x : plr2->your_ships) {
-                health += x.getHealth();
+            for(int i = 0; i < plr2->getCountOfShips(); ++i) {
+                health += plr2->getShip(i).getHealth();
             }
             if(health == 0) {
                 std::cout << "Player1 Win!!!" << std::endl;
                 return;
             }
         }
+
+        for(int i = 0; i < 10; ++i) {
+            std::cout << std::endl;
+        }
         std::cout << "Player2 - your turn to shoot, chose cell x y :" << std::endl;
+        RestoreInfo();
+        DrawView(2);
         while(hand.step(hand.plr2, hand.plr1)) {
             RestoreInfo();
             std::cout << "success, try again!" << std::endl;
             DrawView(2);
             size_t health = 0;
-            for(auto x : plr1->your_ships) {
-                health += x.getHealth();
+            for(int i = 0; i < plr1->getCountOfShips(); ++i) {
+                health += plr1->getShip(i).getHealth();
             }
             if(health == 0) {
                 std::cout << "Player2 Win!!!" << std::endl;
@@ -212,26 +224,26 @@ void Game::DrawView(size_t number) {
 void Game::RestoreInfo() {
     for(int i = 0; i < size_of_field; ++i) {
         for(int j = 0; j < size_of_field; ++j) {
-            if(plr1->your_field[i][j].getStatus() == status::SHADED) {
+            if(plr1->getFriendCell(i, j) == status::SHADED) {
                 plr1_friend_field[i][j] = 'w';
                 plr2_enemy_field[i][j] = 'w';
             }
-            if(plr1->your_field[i][j].getStatus() == status::DAMAGE) {
+            if(plr1->getFriendCell(i, j) == status::DAMAGE) {
                 plr1_friend_field[i][j] = 'X';
                 plr2_enemy_field[i][j] = 'X';
             }
-            if(plr1->your_field[i][j].getStatus() == status::SHIP) {
+            if(plr1->getFriendCell(i, j) == status::SHIP) {
                 plr1_friend_field[i][j] = 'T';
             }
-            if(plr2->your_field[i][j].getStatus() == status::SHADED) {
+            if(plr2->getFriendCell(i, j) == status::SHADED) {
                 plr2_friend_field[i][j] = 'w';
                 plr1_enemy_field[i][j] = 'w';
             }
-            if(plr2->your_field[i][j].getStatus() == status::DAMAGE) {
+            if(plr2->getFriendCell(i, j) == status::DAMAGE) {
                 plr2_friend_field[i][j] = 'X';
                 plr1_enemy_field[i][j] = 'X';
             }
-            if(plr2->your_field[i][j].getStatus() == status::SHIP) {
+            if(plr2->getFriendCell(i, j) == status::SHIP) {
                 plr2_friend_field[i][j] = 'T';
             }
         }

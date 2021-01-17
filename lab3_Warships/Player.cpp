@@ -139,7 +139,7 @@ std::pair<int, int> HardBot::shoot() {
         if (last_x1 == last_x2 && last_y1 == last_y2) {
             if ((last_x1 < 9) && (enemy_field[last_x1 + 1][last_y1].getStatus() == status::CLEAR)) {
                 last_x2 = last_x1 + 1;
-                return {last_x1, last_y1};
+                return {last_x2, last_y1};
             }
             if ((last_x1 > 0) && (enemy_field[last_x1 - 1][last_y1].getStatus() == status::CLEAR)) {
                 last_x2 = last_x1;
@@ -148,7 +148,7 @@ std::pair<int, int> HardBot::shoot() {
             }
             if ((last_y1 < 9) && (enemy_field[last_x1][last_y1 + 1].getStatus() == status::CLEAR)) {
                 last_y2 = last_y1 + 1;
-                return {last_x1, last_y1};
+                return {last_x1, last_y2};
             }
             if ((last_y1 > 0) && (enemy_field[last_x1][last_y1 - 1].getStatus() == status::CLEAR)) {
                 last_y2 = last_y1;
@@ -410,4 +410,34 @@ bool Player::CheckShip(int x, int y, int direct, size_t size) {
 size_t Player::getCountOfShips() {
     return count_of_ships;
 }
+
+status Player::getFriendCell(size_t x, size_t y) {
+    return your_field[x][y].getStatus();
+}
+
+status Player::getEnemyCell(size_t x, size_t y) {
+    return enemy_field[x][y].getStatus();
+}
+
+void Player::setFriendCell(size_t x, size_t y, status st) {
+    your_field[x][y].setStatus(st);
+}
+
+void Player::setEnemyCell(size_t x, size_t y, status st) {
+    enemy_field[x][y].setStatus(st);
+}
+
+Ship& Player::getShip(size_t index) {
+    return your_ships[index];
+}
+
+std::string Player::getName() {
+    return name;
+}
+
+
+
+
+
+
 

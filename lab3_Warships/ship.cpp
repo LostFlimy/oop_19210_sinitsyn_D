@@ -27,7 +27,7 @@ bool Ship::damage(int _x, int _y) {
         if(_x < x){
             return false;
         }
-        health -= 1;
+        health--;
         return true;
     }
     if(direction == route::Y){
@@ -40,7 +40,7 @@ bool Ship::damage(int _x, int _y) {
         if(_y < y) {
             return false;
         }
-        health -= 1;
+        health--;
         return true;
     }
     return true;
